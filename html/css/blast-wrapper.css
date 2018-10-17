@@ -1,0 +1,330 @@
+#dummy {
+  opacity: 0.5;
+}
+#template {
+  display: none;
+}
+
+.success {
+  color:blue;
+}
+
+.wait {
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+
+}
+
+.ready {
+  animation: 2s ease 0s 1 normal none change;
+  animation-play-state: running;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+.error {
+  color:red;
+}
+
+.change {
+  animation: 1s ease 0s 10 normal none change;
+  animation-play-state: running;
+}
+
+
+
+
+
+@keyframes showin {
+  0% {
+  width:0%;
+  background-color: #a9a9a9;
+  }
+  100% {
+  width:100%;
+  background-color: #fff;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+  height: 150px;
+  background-color: #000;
+  }
+  99% {
+  height: 0px;
+  background-color: #fff;
+  }
+  100% {
+  border: solid 0px #000000;
+  }
+}
+
+@keyframes haearBeat {
+  0% {
+  width: 20px;
+  height: 20px;
+  }
+  30% {
+  width: 32px;
+  height: 32px;
+  }
+  100% {
+  width: 20px;
+  height: 20px;
+  }
+}
+
+@keyframes change {
+  0% {
+  background-color: #a9a9a9;
+  }
+  100% {
+  background-color: #fff;
+  }
+}
+
+body {
+  width: 1600px;
+  min-width: 1600px;
+  margin: 0px;
+}
+
+header {
+  position:fixed;
+  width: 1600px;
+  height: 200px;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  font-weight:bold;
+}
+
+#invoker{
+  background-color: #EEEEEE;
+  text-align:  center;
+  vertical-align: middle;
+  padding: 10px;
+}
+
+#contents {
+  margin-top:230px;
+}
+
+#consoles {
+  background-color: #EEEEEE;
+}
+
+.console {
+  margin: 5px;
+  border: solid 1px #000000;
+}
+
+ul#navi {
+  display: -webkit-flex;
+  display: flex;
+  list-style: none;
+  background: #000000;
+  padding: 2px;
+  margin: 0px;
+}
+
+ul#navi li:first-child {
+  margin-right: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center
+}
+
+ul#navi li {
+  padding-left: 4px;
+  padding-right: 4px;
+  border: solid 1px #000000;
+  transition: all 300ms 0s ease;
+}
+
+ul#navi li:hover {
+  border-bottom: solid 1px #ffffff;
+}
+
+#logo {
+  font-weight:bold;
+  font-style: italic;
+  font-size: 1.5em;
+  text-decoration: none;
+  background: #000;
+  color: #fff;
+}
+
+.inline {
+  display: -webkit-flex;
+  display: flex;
+  list-style: none;
+}
+
+.row {
+  margin-left: 10px;
+}
+
+.header {
+  background-color: #C2EEFF;
+  border-top: inset 5px #000000;
+  border-bottom: double 3px #000000;
+}
+
+.data {
+  height: 150px;
+}
+.show {
+  height: 150px;
+  border-bottom: solid 2px #000000;
+  animation: 1s ease 0s 1 normal none showin;
+  animation-play-state: running;
+}
+
+.unshow {
+  height: 0px;
+  animation: 500ms ease 0s 1 normal none fadeOut;
+  animation-play-state: running;
+}
+
+
+.row div {
+  text-align: center;
+}
+
+.row .operation {
+  width: 25px;
+  margin: auto;
+}
+
+.row .index {
+  width: 25px;
+  margin: auto;
+}
+
+.row .seq {
+  width: 700px;
+}
+
+.row .description {
+  width: 300px;
+}
+
+.row .info {
+  width: 200px;
+  margin: auto;
+}
+
+.row .rid {
+  width: 200px;
+  margin: auto;
+}
+
+.row .status {
+  width: 200px;
+  margin: auto;
+}
+
+textarea {
+  width: 97%;
+  height: 95%;
+}
+
+button {
+  border-radius: 25px;
+  font-weight: bold;
+  padding: 0px;
+  border-style: none;
+  opacity: 0.4;
+  transition: all 500ms 0s ease;
+}
+
+button:hover {
+  opacity: 1.0;
+  transition: all 300ms 0s ease;
+}
+.remove {
+  background-color: #f00;
+  color: #fff;
+  width: 20px;
+  height: 20px;
+
+}
+
+#search {
+  font-size: 1.4em;
+  background-color: #00f;
+  color: #fff;
+  width: 200px;
+  height: 50px;
+  vertical-align: middle;
+  position:relative;
+}
+
+#clear {
+  font-size: 1.4em;
+  background-color: #FF6633;
+  color: #fff;
+  width: 60px;
+  height: 40px;
+  vertical-align: middle;
+  position:relative;
+  left:500px
+}
+
+#clear div {
+  width:20px;
+  height:20px;
+  background-image:url(../img/bomb.svg);
+  background-size:100%;
+  margin: auto;
+
+}
+
+#clear div:hover {
+//  width:32px;
+//  height:32px;
+//  transition: all 300ms 0s ease;
+  animation: 1s ease 0s 1 normal none heartBeat;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-play-state: running;
+}
+
+.bullet {
+  width: 100%;
+  margin: auto;
+  margin-right: 10px;
+  margin-left: 5px;
+}
+
+.gear {
+  width:15px;
+  height:15px;
+  background-image:url(../img/gear.svg);
+  background-size:100%;
+}
+
+
+#draggable {
+  font-size: 5em;
+  font-weight:bold;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #C2EEFF;
+  opacity: 0.9;
+  z-index: 99;
+  top: 0;
+  left: 0;
+  line-height: 180px;
+  text-align: center;
+  
+  display: none;
+}

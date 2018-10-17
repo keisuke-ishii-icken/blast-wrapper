@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>blast wrapper</title>
+<!--
+<script src="libs/handsontable/handsontable.full.min.js"></script>
+<link href="libs/handsontable/handsontable.full.min.css" rel="stylesheet" media="screen">
+-->
+
+<link href="css/blast-wrapper.css" rel="stylesheet">
+
+<script src="libs/jquery/jquery.min.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/blast-wrapper.js"></script>
+
+
+</head>
+<body>
+<header>
+<ul id="navi">
+<li><a href="index.html" id="logo">Blast Wrapper</a></li>
+<li><a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi?PROGRAM=blastn&PAGE_TYPE=BlastSearch&LINK_LOC=blasthome" target="_blank"><img src="img/link.png" alt=""></a></li>
+<li><a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=DeveloperInfo" target="_blank"><img src="img/dev.png" alt=""></a></li>
+</ul>
+<div id="consoles" class="inline">
+<div id="blastConsole" class="console">
+<div>
+<div class="inline"><div class="bullet gear"></div>BLAST configuration</div></div>
+<select id="database" defval="nr">
+  <optgroup label="Basic">
+  <option value="hc" selected="selected">Human genomic + transcript</option>
+  <option value="gc">Mouse genomic + transcript</option>
+  </optgroup>
+  
+  <optgroup label="Genomic plus Transcript">
+  <option value="GPIPE/9606/current/all_top_level GPIPE/9606/current/rna">Human genomic plus transcript (Human G+T)</option>
+  <option value="GPIPE/10090/current/all_top_level GPIPE/10090/current/rna">Mouse genomic plus transcript (Mouse G+T)</option>
+  </optgroup>
+  <optgroup label="Other Databases">
+  <!-- blastn, megablast, discomegablast, tblastn, tblastx --> 
+  <option value="nr">Nucleotide collection (nr/nt)</option> 
+  <option value="rRNA_typestrains/prokaryotic_16S_ribosomal_RNA">16S ribosomal RNA sequences (Bacteria and Archaea)</option>
+  <option value="refseq_rna">Reference RNA sequences (refseq_rna)</option>
+  <option value="refseq_representative_genomes">RefSeq Representative genomes (refseq_representative_genomes)</option>
+  <option value="refseq_genomes">RefSeq Genome Database (refseq_genomes)</option>
+  <option value="Whole_Genome_Shotgun_contigs">Whole-genome shotgun contigs (wgs)</option>
+  <option value="est">Expressed sequence tags (est)</option>
+  <option value="sra">Sequence Read Archive (SRA) </option>
+  <option value="tsa_nt">Transcriptome Shotgun Assembly (TSA)</option>
+  <option value="htgs">High throughput genomic sequences (HTGS)</option>
+  <option value="pat">Patent sequences(pat)</option>
+  <option value="pdb">Protein Data Bank (pdb)</option>
+  <option value="refseq_genomic">Reference genomic sequences (refseq_genomic)</option>
+  <option value="genomic/9606/RefSeqGene">Human RefSeqGene sequences(RefSeq_Gene)</option>
+  <option value="gss">Genomic survey sequences (gss)</option>
+  <option value="dbsts">Sequence tagged sites (dbsts)</option>
+  </optgroup> 
+</select>
+<select>
+  <option>Highly similar sequences (megablast)</option>
+  <option>More dissimilar sequences (discontiguous megablast)</option>
+  <option>Somewhat similar sequences (blastn)</option>
+</select>
+</div>
+<div id="metaConsole" class="console">
+<div class="inline line"><div class="bullet gear"></div>other configuration</div>
+  url:<input type="text" id="targetUrl" />
+  communication:<input type="text" id="polling" /><input type="text" id="s" />
+  
+</div>
+</div>
+<div id="invoker">
+<button id="search" type="button">search</button>
+<button id="clear" type="button"><div></div></button>
+</div>
+<div class="header row inline"><div class="operation"></div><div class="index">#</div><div class="seq">sequence</div><div class="description">description</div><div class="info">info</div><div class="rid">rid</div><div class="status">status</div></div>
+</header>
+
+<div id="contents">
+<div id="launcher">
+  <div id="template" class="target row data inline"><div class="operation"><button class="remove">Å~</button></div><div class="index">0</div><div class="seq"><textarea placeholder="input sequence like AATTCCGG..."></textarea></div><div class="description"><textarea placeholder="note something you want e.g. id or name."></textarea></div><div class="info">-</div><div class="rid"><input type="text"></input></div><div class="status">EMPTY</div></div>
+  <div               class="target row data show inline"><div class="operation"><button class="remove">Å~</button></div><div class="index">1</div><div class="seq"><textarea placeholder="input sequence like AATTCCGG..."></textarea></div><div class="description"><textarea placeholder="note something you want e.g. id or name."></textarea></div><div class="info">-</div><div class="rid"><input type="text"></input></div><div class="status">EMPTY</div></div>
+</div>
+<div id="dummy">
+  <div id="add" class="row data inline"><div class="operation"></div><div class="index">-</div><div class="seq"><textarea placeholder="click me, if you want another row." disabled></textarea></div><div class="description"><textarea placeholder="click me, if you want another row." disabled></textarea></div><div class="info">-</div><div class="rid"><input type="text" disabled></input></div><div class="status">EMPTY</div></div>
+</div>
+
+</div>
+
+<div id="draggable">drag file!</div>
+
+</body>
+</html>
