@@ -25,9 +25,10 @@
 </ul>
 <div id="consoles" class="inline">
 <div id="blastConsole" class="console">
-<div>
-<div class="inline"><div class="bullet gear"></div>BLAST configuration</div></div>
-<select id="database" defval="nr">
+<div class="inline line subhead"><div class="bullet gear"></div>BLAST configuration(not implemented)</div>
+<ul>
+<li>
+<select id="database">
   <optgroup label="Basic">
   <option value="hc" selected="selected">Human genomic + transcript</option>
   <option value="gc">Mouse genomic + transcript</option>
@@ -57,17 +58,28 @@
   <option value="dbsts">Sequence tagged sites (dbsts)</option>
   </optgroup> 
 </select>
-<select>
-  <option>Highly similar sequences (megablast)</option>
-  <option>More dissimilar sequences (discontiguous megablast)</option>
-  <option>Somewhat similar sequences (blastn)</option>
+<select id="program">
+  <option value='{"program":"blastn","megablast":true, "discontiguous":false}'>Highly similar sequences (megablast)</option>
+  <option value='{"program":"blastn","megablast":true, "discontiguous":true}'>More dissimilar sequences (discontiguous megablast)</option>
+  <option value='{"program":"blastn","megablast":false,"discontiguous":false}'>Somewhat similar sequences (blastn)</option>
 </select>
+</li>
+<li>
+<input type="checkbox" class="enterzParams" id="excludeUncultured" value="1">Uncultured/environmental sample sequences
+</li>
+<hr>
+<li>
+<textarea class="inputRow" id="enterzQuery" placeholder="Entrez Query" ></textarea>
+</li>
+</ul>
 </div>
 <div id="metaConsole" class="console">
-<div class="inline line"><div class="bullet gear"></div>other configuration</div>
-  url:<input type="text" id="targetUrl" />
-  communication:<input type="text" id="polling" /><input type="text" id="s" />
-  
+<div class="inline line subhead"><div class="bullet gear"></div>other configuration(not implemented)</div>
+  <ul>
+  <li><input type="text" id="targetUrl" class="inputL" placeholder="url" /> is used as an API.</li>
+  <li>polling status every <input type="text" class="inputXS" id="polling" /> msec.</li>
+  </ul>
+</div>
 </div>
 </div>
 <div id="invoker">
@@ -89,6 +101,5 @@
 </div>
 
 <div id="draggable">drag file!</div>
-
 </body>
 </html>

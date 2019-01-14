@@ -1,7 +1,10 @@
-
+'use strict';
 
 
 $(function(){
+
+
+
 $(document).on({
   'scroll': function(event) {
     $('header').css('left', -window.scrollX + "px");
@@ -36,6 +39,17 @@ $('#draggable').on({
         console.log('unsupported file.');
       }
     }
+  }
+});
+
+$('.enterzParams').on({
+  'load': function(event) {
+    let query = $('#excludeUncultured').prop('checked') ? 'all [filter] NOT(environmental samples[organism] OR metagenomes[orgn] OR txid32644[orgn])' : '';
+    $('#enterzQuery').val(query);
+  },
+  'change': function(event) {
+    let query = $('#excludeUncultured').prop('checked') ? 'all [filter] NOT(environmental samples[organism] OR metagenomes[orgn] OR txid32644[orgn])' : '';
+    $('#enterzQuery').val(query);
   }
 });
 
@@ -89,11 +103,11 @@ $('#clear').on('click', function(event) {
 });
 
 
-let restricter = {request: 0, polling: 0};
+let restricter = {requested: 0, polled: 0};
 
 setInterval(function(){
   const targets = $('.target.show');
-  let polled = false;
+  let hasPolled = false;
   clean();
   for(var i = 0; i <  targets.length; i++) {
     const target = $(targets[i]);
@@ -101,22 +115,40 @@ setInterval(function(){
     const key = Object.keys(settings.status).filter(function(k) { return settings.status[k] == status.text() })[0];
     update(target, key);
     const seq = target.find('.seq textarea').val();
-    if(seq && settings.status.processing === status.text() && (settings.launch < (Date.now() - restricter.request))) {
-      restricter.request = Date.now();
+    if(seq && settings.status.processing === status.text() && (settings.launch < (Date.now() - restricter.requested))) {
+      restricter.requested = Date.now();
       const database = $('#database').val();
-      post(settings.postUrl, settings.sample.replace('${seq}', seq), target);
-    } else if(settings.status.searching === status.text() && (settings.polling < (Date.now() - restricter.polling))) {
-      polled = true;
-      const rid = target.find('.rid input').val();
-      get(settings.getUrl.replace('${rid}', rid), target)
+      const params = {
+        CMD: 'Put',
+        ENTREZ_QUERY: $('#enterzQuery').val().replace(/ /g, '+'),
+        PROGRAM: JSON.parse($('#program').val()).program,
+        MEGABLAST: JSON.parse($('#program').val()).megablast ? 'on' : undefined,
+        DATABASE: $('#database').val(),
+        QUERY: seq
+      };
+      const paramstr = Object.keys(params).filter(function (v) {return params[v]}).map(function(v){return v+'='+params[v]}).join('&');
+      post($('#targetUrl').val(), paramstr, target);
+    } else if(settings.status.searching === status.text() && ($('#polling').val() < (Date.now() - restricter.polled))) {
+      hasPolled = true;
+      const params = {
+        CMD: 'Get',
+        RID: target.find('.rid input').val()
+      };
+      const paramstr = Object.keys(params).filter(function (v) {return params[v]}).map(function(v){return v+'='+params[v]}).join('&');
+      get($('#targetUrl').val() + '?' + paramstr, target)
     }
   }
-  if(polled) {
-    restricter.polling = Date.now();
+  if(hasPolled) {
+    restricter.polled = Date.now();
   }
   
 }, settings.listen);
 
+$('#targetUrl').val(settings.targetUrl);
+$('#polling').val(settings.polling);
+$('#database').val(settings.database);
+$('#program').val(settings.program);
+$('#excludeUncultured').prop('checked', settings.excludeUncultured);
+
+
 });
-
-

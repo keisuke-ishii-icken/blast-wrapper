@@ -1,10 +1,11 @@
 const settings = {
-  postUrl: 'https://blast.ncbi.nlm.nih.gov/blast/Blast.cgi',
-  sample: 'CMD=Put&PROGRAM=blastn&DATABASE=nr&FORMAT_TYPE=JSON2&QUERY=${seq}',
-  getUrl: 'https://blast.ncbi.nlm.nih.gov/blast/Blast.cgi?CMD=Get&RID=${rid}',
+  targetUrl: 'https://blast.ncbi.nlm.nih.gov/blast/Blast.cgi',
   timeout: 60000,
   launch: 10000,
   polling: 60000,
   listen: 1000,
-  status: {empty: 'EMPTY', ready: 'READY', processing: 'PROCESSING...', searching: 'SEARCHING...', finished: 'FINISHED!', error: 'ERROR!'}
+  status: {empty: 'EMPTY', ready: 'READY', processing: 'PROCESSING...', searching: 'SEARCHING...', finished: 'FINISHED!', error: 'ERROR!'},
+  database:'nr',
+  program:'{"program":"blastn","megablast":true, "discontiguous":false}',
+  excludeUncultured:false
 };

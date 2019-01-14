@@ -92,8 +92,15 @@ function draw(targets) {
 }
 
 function calcurate(row) {
-  const seq = row.find('.seq textarea').val();
-  row.find('.info').html('length:' + seq.length);
+  const seq = row.find('.seq textarea').val().toLowerCase();
+  const counter = {
+    a: seq.split(/a/gm).length - 1,
+    t: seq.split(/t/gm).length - 1,
+    g: seq.split(/g/gm).length - 1,
+    c: seq.split(/c/gm).length - 1,
+    n: seq.split(/n/gm).length - 1
+  };
+  row.find('.info').html('length:' + seq.length + '<br />A:' +counter.a + '<br />T:' +counter.t + '<br />G:' +counter.g + '<br />C:' +counter.c + '<br />N:' +counter.n);
   if(seq) {
     update(row, 'ready');
   } else {

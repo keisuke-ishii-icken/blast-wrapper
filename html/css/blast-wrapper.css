@@ -97,7 +97,6 @@ header {
   top: 0;
   left: 0;
   z-index: 10;
-  font-weight:bold;
 }
 
 #invoker{
@@ -107,9 +106,7 @@ header {
   padding: 10px;
 }
 
-#contents {
-  margin-top:230px;
-}
+
 
 #consoles {
   background-color: #EEEEEE;
@@ -118,6 +115,29 @@ header {
 .console {
   margin: 5px;
   border: solid 1px #000000;
+}
+
+.console ul{
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-left: 20px;
+}
+
+.console li{
+  font-size: 90%;
+  list-style: none;
+}
+
+#blastConsole{
+  800px;
+}
+
+#metaConsole {
+  width:500px;
+}
+
+.subhead {
+  font-weight:bold;
 }
 
 ul#navi {
@@ -161,10 +181,22 @@ ul#navi li:hover {
   color: #fff;
 }
 
+#contents {
+  margin-top:300px;
+}
+
 .inline {
   display: -webkit-flex;
   display: flex;
   list-style: none;
+}
+
+.line {
+  width:100%;
+}
+
+.line {
+  inden
 }
 
 .row {
@@ -300,7 +332,7 @@ button:hover {
 .bullet {
   width: 100%;
   margin: auto;
-  margin-right: 10px;
+  margin-right: 5px;
   margin-left: 5px;
 }
 
@@ -327,4 +359,16 @@ button:hover {
   text-align: center;
   
   display: none;
+}
+
+.inputRow {
+  width: 97%;
+}
+
+.inputL {
+  width: 300px;
+}
+
+.inputXS {
+  width: 50px;
 }
