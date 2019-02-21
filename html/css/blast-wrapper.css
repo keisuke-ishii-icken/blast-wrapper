@@ -277,6 +277,10 @@ ul#navi li:hover {
   margin: auto;
 }
 
+.smallfont{
+  font-size: x-small;
+}
+
 .row .detail {
   width: 400px;
   margin: auto;

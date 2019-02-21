@@ -1,59 +1,34 @@
 "use strict";
 
-function post(url, data, row) {
+function post(url, data, successed, failed) {
     $.ajax({
-        url: url,
-        type: 'POST',
-        timeout: settings.timeout,
-        cache: false,
-        data: data,
-        dataType: 'text'
-    }).done(function (response, textStatus, jqXHR) {
-      const rid = $($.parseHTML(response)).find('#rid').val();
-      row.find('.rid input').val(rid);
-      update(row, 'searching')
-      console.log(jqXHR);
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-      update(row, 'error');
-      row.find('input, textarea').prop("disabled", false);
+      url: url,
+      type: 'POST',
+      timeout: settings.timeout,
+      cache: false,
+      data: data,
+      dataType: 'text'
+    }).done(successed).fail(failed).always(function(jqXHR, textStatus) {
       console.log(jqXHR);
     });
 };
 
 
-function get(url, row) {
+function get(url, params, successed, failed) {
     $.ajax({
-        url: url,
-        type: 'GET',
-        timeout: settings.timeout,
-        cache: false,
-        dataType: 'text'
-    }).done(function (response, textStatus, jqXHR) {
-      const result = $($.parseHTML(response)).find('#statInfo').attr('class');
-      if(!result) {
-        update(row, 'success');
-        const rid = row.find('.rid input').val();
-        const params = {
-          CMD: 'Get',
-          RESULTS_FILE: 'on',
-          RID: rid,
-          FORMAT_TYPE: 'JSON2_S',
-          FORMAT_OBJECT: 'Alignment'
-        };
-        const paramstr = Object.keys(params).filter(function (v) {return params[v]}).map(function(v){return v+'='+params[v]}).join('&');
-        const download = $('#targetUrl').val() + '?' + paramstr;
-        row.find('.result').html('<a href="' + url + '" target="_blank">&gt;&gt;to blast</a><br /><a href="' + download + '" target="_blank">&gt;&gt;download</a>');
-        row.find('input, textarea').prop("disabled", false);
-      } else if(result === 'UNKNOWN') {
-        update(row, 'error');
-        row.find('input, textarea').prop("disabled", false);
-      }
-      console.log(jqXHR);
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-      update(row, 'error');
+      url: url + '?' + requestParameter(params),
+      type: 'GET',
+      timeout: settings.timeout,
+      cache: false,
+      dataType: 'text'
+    }).done(successed).fail(failed).always(function(jqXHR, textStatus) {
       console.log(jqXHR);
     });
 };
+
+function requestParameter(params) {
+  return Object.keys(params).filter(function (k) {return params[k]}).map(function(k){return k+'='+params[k]}).join('&')
+}
 
 function loadSeq(file) {
   const reader = new FileReader();
@@ -76,6 +51,9 @@ function loadSeq(file) {
     let targets = [];
     for (var i = 0; i < lines.length; i++) {
       if(i === 0 && meta.containsHeader) {
+        continue;
+      }
+      if(!lines[i]) {
         continue;
       }
       const datas = lines[i].split(/,\s*/);
