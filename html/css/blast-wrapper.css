@@ -6,7 +6,8 @@
 }
 
 .success {
-  color:blue;
+  background-color:#33FF66;
+  transition: all 300ms 0s ease;
 }
 
 .wait {
@@ -16,14 +17,27 @@
 }
 
 .ready {
-  animation: 2s ease 0s 1 normal none change;
-  animation-play-state: running;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
+  background-color:#FFFF55;
+  transition: all 300ms 0s ease;
+  //animation: 2s ease 0s 1 normal none change;
+  //animation-play-state: running;
+  //animation-iteration-count: infinite;
+  //animation-direction: alternate;
+}
+
+.processing {
+  background-color:#999999;
+  transition: all 300ms 0s ease;
+}
+
+.searching {
+  background-color:#555555;
+  transition: all 300ms 0s ease;
 }
 
 .error {
-  color:red;
+  background-color:#FF4F50;
+  transition: all 300ms 0s ease;
 }
 
 .change {
@@ -241,7 +255,7 @@ ul#navi li:hover {
 }
 
 .row .seq {
-  width: 700px;
+  width: 300px;
 }
 
 .row .description {
@@ -258,8 +272,13 @@ ul#navi li:hover {
   margin: auto;
 }
 
-.row .status {
-  width: 200px;
+.row .result {
+  width: 500px;
+  margin: auto;
+}
+
+.row .detail {
+  width: 400px;
   margin: auto;
 }
 

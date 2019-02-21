@@ -1,3 +1,5 @@
+"use strict";
+
 function post(url, data, row) {
     $.ajax({
         url: url,
@@ -12,7 +14,9 @@ function post(url, data, row) {
       update(row, 'searching')
       console.log(jqXHR);
     }).fail(function (jqXHR, textStatus, errorThrown) {
-        console.log(jqXHR);
+      update(row, 'error');
+      row.find('input, textarea').prop("disabled", false);
+      console.log(jqXHR);
     });
 };
 
@@ -27,15 +31,27 @@ function get(url, row) {
     }).done(function (response, textStatus, jqXHR) {
       const result = $($.parseHTML(response)).find('#statInfo').attr('class');
       if(!result) {
-        row.find('.status').html('<a href="' + url + '" target="_blank">' + settings.status.finished + '</a>');
+        update(row, 'success');
+        const rid = row.find('.rid input').val();
+        const params = {
+          CMD: 'Get',
+          RESULTS_FILE: 'on',
+          RID: rid,
+          FORMAT_TYPE: 'JSON2_S',
+          FORMAT_OBJECT: 'Alignment'
+        };
+        const paramstr = Object.keys(params).filter(function (v) {return params[v]}).map(function(v){return v+'='+params[v]}).join('&');
+        const download = $('#targetUrl').val() + '?' + paramstr;
+        row.find('.result').html('<a href="' + url + '" target="_blank">&gt;&gt;to blast</a><br /><a href="' + download + '" target="_blank">&gt;&gt;download</a>');
         row.find('input, textarea').prop("disabled", false);
       } else if(result === 'UNKNOWN') {
-        update(row, 'error')
+        update(row, 'error');
         row.find('input, textarea').prop("disabled", false);
       }
       console.log(jqXHR);
     }).fail(function (jqXHR, textStatus, errorThrown) {
-        console.log(jqXHR);
+      update(row, 'error');
+      console.log(jqXHR);
     });
 };
 
@@ -69,12 +85,12 @@ function loadSeq(file) {
       };
       targets.push(target);
     }
-    draw(targets);
+    drawSeq(targets);
   }
   reader.readAsText(file);
 };
 
-function draw(targets) {
+function drawSeq(targets) {
   const reserved = $('.target.show').filter(function(index, element, array) {
     return ($(element).find('.seq textarea').val() !== '');
   }).length;
@@ -89,7 +105,41 @@ function draw(targets) {
     $(row).find('.description textarea').val(targets[i].description);
     calcurate($(row));
   }
+};
+
+function loadResult(file) {
+  const reader = new FileReader();
+  const rid = file.name.substr(0, file.name.indexOf('-'));
+  reader.onload = function(e) {
+    const result = JSON.parse(reader.result);
+    drawResult(rid, null, result);
+  }
+  reader.readAsText(file);
+};
+
+function drawResult(rid, discription, result) {
+  $('.rid');
+  console.log(result);
+  console.log(result.BlastOutput2[0].report);
+  console.log(result.BlastOutput2[0].report.results.search.hits[0]);
+
+  const reserved = $('.target.show').filter(function(index, element, array) {
+    return ($(element).find('.rid input').val() !== '');
+  }).length;
+  const vacant = $('.target.show').length - reserved;
+  for (var i = 0; i < 1 - vacant; i++) {
+    $('#add').click();
+  }
+  const afters = $('.target.show');
+  const row = afters[reserved];
+  $(row).find('.rid input').val(rid);
+  $(row).find('.discription textarea').val(discription);
+  //$(row).find('.seq textarea').val(targets[i].sequence);
+  //$(row).find('.description textarea').val(targets[i].description);
+  //calcurate($(row));
 }
+
+
 
 function calcurate(row) {
   const seq = row.find('.seq textarea').val().toLowerCase();
@@ -114,13 +164,12 @@ function clean() {
 }
 
 function update(row, status) {
-  const column = row.find('.status');
   for(var i in settings.status) {
-    column.removeClass(i);
+    row.removeClass(i);
   }
-  column.addClass(status);
+  row.addClass(status);
   if('finished' !== status) {
-    column.html(settings.status[status]);
+    //row.html(settings.status[status]);
   }
 }
 

@@ -1,3 +1,5 @@
+"use strict";
+
 const settings = {
   targetUrl: 'https://blast.ncbi.nlm.nih.gov/blast/Blast.cgi',
   timeout: 60000,

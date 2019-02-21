@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 
 $(function(){
@@ -35,6 +35,8 @@ $('#draggable').on({
     for(var i = 0; i < files.length; i++) {
       if(files[i].name.match('.*\.csv$')) {
         loadSeq(files[i]);
+      } else if(files[i].name.match('.*\.json$')){
+        loadResult(files[i]);
       } else {
         console.log('unsupported file.');
       }
@@ -58,8 +60,7 @@ $('#search').on('click', function(event){
   for(var i = 0; i <  targets.length; i++) {
     const target = $(targets[i]);
     const seq = target.find('.seq textarea').val();
-    const status = target.find('.status').text();
-    if(seq && settings.status.ready === status) {
+    if(seq && target.is('.ready')) {
       update(target, 'processing');
       target.find('input, textarea').prop("disabled", true);
     }
@@ -109,13 +110,13 @@ setInterval(function(){
   const targets = $('.target.show');
   let hasPolled = false;
   clean();
+  disableSearch();
   for(var i = 0; i <  targets.length; i++) {
     const target = $(targets[i]);
-    const status = target.find('.status');
-    const key = Object.keys(settings.status).filter(function(k) { return settings.status[k] == status.text() })[0];
+    const key = Object.keys(settings.status).filter(function(k) { return target.is('.' + k) })[0];
     update(target, key);
     const seq = target.find('.seq textarea').val();
-    if(seq && settings.status.processing === status.text() && (settings.launch < (Date.now() - restricter.requested))) {
+    if(seq && target.is('.processing') && (settings.launch < (Date.now() - restricter.requested))) {
       restricter.requested = Date.now();
       const database = $('#database').val();
       const params = {
@@ -128,7 +129,7 @@ setInterval(function(){
       };
       const paramstr = Object.keys(params).filter(function (v) {return params[v]}).map(function(v){return v+'='+params[v]}).join('&');
       post($('#targetUrl').val(), paramstr, target);
-    } else if(settings.status.searching === status.text() && ($('#polling').val() < (Date.now() - restricter.polled))) {
+    } else if(target.is('.searching') && ($('#polling').val() < (Date.now() - restricter.polled))) {
       hasPolled = true;
       const params = {
         CMD: 'Get',
@@ -136,6 +137,8 @@ setInterval(function(){
       };
       const paramstr = Object.keys(params).filter(function (v) {return params[v]}).map(function(v){return v+'='+params[v]}).join('&');
       get($('#targetUrl').val() + '?' + paramstr, target)
+    } else if(target.is('.ready')) {
+      enableSearch();
     }
   }
   if(hasPolled) {
@@ -143,6 +146,16 @@ setInterval(function(){
   }
   
 }, settings.listen);
+
+function disableSearch() {
+  $('#search').attr('disabled', true);
+  $('#search').html('input seq');
+}
+
+function enableSearch() {
+  $('#search').attr('disabled', false);
+  $('#search').html('search');
+}
 
 $('#targetUrl').val(settings.targetUrl);
 $('#polling').val(settings.polling);
