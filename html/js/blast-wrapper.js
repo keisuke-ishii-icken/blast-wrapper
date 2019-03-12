@@ -159,18 +159,18 @@ setInterval(function(){
       };
       
       const afterJson = function (response, textStatus, jqXHR) {
-      target.find('.result').html('');
+      target.find('.results').html('');
         const result = JSON.parse(response);
         const hits = result.BlastOutput2[0].report.results.search.hits;
         for (var j = 0; (j <  hits.length) && (j < 8); j++) {
-          target.find('.result').append(j + ':');
-          target.find('.result').append('query=' + hits[i].hsps[0].query_from + '-' + hits[i].hsps[0].query_to + '(' + hits[i].hsps[0].query_strand + ')' + ', ');
-          target.find('.result').append('score=' + hits[i].hsps[0].score + ', ');
-          target.find('.result').append('identity=' + hits[i].hsps[0].identity + '<br />');
+          const title = hits[j].description[0].title;
+          const display = title.length > 65 ? title.substr(0, 65) + '...' : title;
+          const ident = (hits[j].hsps[0].identity / hits[j].hsps[0].align_len * 100).toFixed(2);
+          target.find('.results').append('<div class="result">' + (j + 1) + '. ' + display + ' >> ' + ident + '%</div>');
         }
         const htmlUrl = $('#targetUrl').val() + '?' + requestParameter(getHtml);
         const jsonUrl = $('#targetUrl').val() + '?' + requestParameter(getJson);
-        target.find('.result').append('<a href="' + htmlUrl + '" target="_blank">&gt;&gt;to blast</a><br /><a href="' + jsonUrl + '" target="_blank">&gt;&gt;download</a>');
+        target.find('.results').append('<a href="' + htmlUrl + '" target="_blank">&gt;&gt;to blast</a><br /><a href="' + jsonUrl + '" target="_blank">&gt;&gt;download</a>');
       }
       const afterHtml = function (response, textStatus, jqXHR) {
         const result = $($.parseHTML(response)).find('#statInfo').attr('class');

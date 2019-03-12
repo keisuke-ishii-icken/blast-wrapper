@@ -19,10 +19,6 @@
 .ready {
   background-color:#FFFF55;
   transition: all 300ms 0s ease;
-  //animation: 2s ease 0s 1 normal none change;
-  //animation-play-state: running;
-  //animation-iteration-count: infinite;
-  //animation-direction: alternate;
 }
 
 .processing {
@@ -74,29 +70,7 @@
   }
 }
 
-@keyframes haearBeat {
-  0% {
-  width: 20px;
-  height: 20px;
-  }
-  30% {
-  width: 32px;
-  height: 32px;
-  }
-  100% {
-  width: 20px;
-  height: 20px;
-  }
-}
 
-@keyframes change {
-  0% {
-  background-color: #a9a9a9;
-  }
-  100% {
-  background-color: #fff;
-  }
-}
 
 body {
   width: 1600px;
@@ -155,7 +129,8 @@ header {
 }
 
 ul#navi {
-  display: -webkit-flex;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   list-style: none;
   background: #000000;
@@ -167,7 +142,6 @@ ul#navi li:first-child {
   margin-right: auto;
   display: -webkit-box;
   display: -ms-flexbox;
-  display: -webkit-flex;
   display: flex;
   -webkit-box-align: center;
   -ms-flex-align: center;
@@ -200,7 +174,8 @@ ul#navi li:hover {
 }
 
 .inline {
-  display: -webkit-flex;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   list-style: none;
 }
@@ -272,10 +247,16 @@ ul#navi li:hover {
   margin: auto;
 }
 
-.row .result {
+.row .results {
   width: 500px;
   margin: auto;
 }
+
+.row .result:hover {
+  text-align: left;
+  background-color: #fff;
+}
+
 
 .smallfont{
   font-size: x-small;
@@ -343,9 +324,6 @@ button:hover {
 }
 
 #clear div:hover {
-//  width:32px;
-//  height:32px;
-//  transition: all 300ms 0s ease;
   animation: 1s ease 0s 1 normal none heartBeat;
   animation-iteration-count: infinite;
   animation-direction: alternate;
