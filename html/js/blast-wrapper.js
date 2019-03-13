@@ -113,10 +113,17 @@ setInterval(function(){
   disableSearch();
   for(var i = 0; i <  targets.length; i++) {
     const target = $(targets[i]);
-    const key = Object.keys(settings.status).filter(function(k) { return target.is('.' + k) })[0];
-    update(target, key);
     const seq = target.find('.seq textarea').val();
+    const failed = function (jqXHR, textStatus, errorThrown) {
+      update(target, 'error');
+      target.find('input, textarea').prop("disabled", false);
+      const errorCode = textStatus + '(error code: ' + jqXHR.status + ')';
+      const errorDetail = 'detail: ' + errorThrown.message;
+      target.find('.results').html(errorCode + '<br />' + errorDetail);
+    }
+    
     if(seq && target.is('.processing') && (settings.launch < (Date.now() - restricter.requested))) {
+      target.find('.results').html('');
       restricter.requested = Date.now();
       const database = $('#database').val();
       const params = {
@@ -127,18 +134,14 @@ setInterval(function(){
         DATABASE: $('#database').val(),
         QUERY: seq
       };
-      const successed = function (response, textStatus, jqXHR) {
+      const entried = function (response, textStatus, jqXHR) {
         const rid = $($.parseHTML(response)).find('#rid').val();
         target.find('.rid input').val(rid);
         update(target, 'searching')
       };
-      const failed = function (jqXHR, textStatus, errorThrown) {
-        update(target, 'error');
-        target.find('input, textarea').prop("disabled", false);
-      };
       
-      const paramstr = Object.keys(params).filter(function (v) {return params[v]}).map(function(v){return v+'='+params[v]}).join('&');
-      post($('#targetUrl').val(), paramstr, successed, failed);
+      const paramstr = requestParameter(params);
+      post($('#targetUrl').val(), paramstr, entried, failed);
 
     } else if(target.is('.searching') && ($('#polling').val() < (Date.now() - restricter.polled))) {
       hasPolled = true;
@@ -153,13 +156,8 @@ setInterval(function(){
         FORMAT_TYPE: 'JSON2_S',
         FORMAT_OBJECT: 'Alignment'
       };
-      const failed = function (jqXHR, textStatus, errorThrown) {
-        update(target, 'error');
-        target.find('input, textarea').prop("disabled", false);
-      };
       
       const afterJson = function (response, textStatus, jqXHR) {
-      target.find('.results').html('');
         const result = JSON.parse(response);
         const hits = result.BlastOutput2[0].report.results.search.hits;
         for (var j = 0; (j <  hits.length) && (j < 8); j++) {
@@ -179,11 +177,11 @@ setInterval(function(){
           update(target, 'success');
           get($('#targetUrl').val(), getJson, afterJson, failed);
         } else if(result === 'UNKNOWN') {
-          target.find('input, textarea').prop("disabled", false);
-          update(target, 'error');
+          failed(jqXHR, textStatus, {message: 'Response from Blast search is "UNKNOWN". Check parameters.'});
         }
       };
       get($('#targetUrl').val(), getHtml, afterHtml, failed);
+      
     } else if(target.is('.ready')) {
       enableSearch();
     }
@@ -193,6 +191,8 @@ setInterval(function(){
   }
   
 }, settings.listen);
+
+
 
 function disableSearch() {
   $('#search').attr('disabled', true);

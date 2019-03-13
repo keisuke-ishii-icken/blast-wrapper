@@ -252,8 +252,11 @@ ul#navi li:hover {
   margin: auto;
 }
 
-.row .result:hover {
+.row .result {
   text-align: left;
+}
+
+.row .result:hover {
   background-color: #fff;
 }
 

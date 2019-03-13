@@ -1,6 +1,6 @@
 "use strict";
 
-function post(url, data, successed, failed) {
+function post(url, data, succeeded, failed) {
     $.ajax({
       url: url,
       type: 'POST',
@@ -8,26 +8,34 @@ function post(url, data, successed, failed) {
       cache: false,
       data: data,
       dataType: 'text'
-    }).done(successed).fail(failed).always(function(jqXHR, textStatus) {
+    }).done(function(response, textStatus, jqXHR){
+      succeeded(response, textStatus, jqXHR);
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+      failed(jqXHR, textStatus, errorThrown);
+    }).always(function(jqXHR, textStatus) {
       console.log(jqXHR);
     });
 };
 
 
-function get(url, params, successed, failed) {
+function get(url, params, succeeded, failed) {
     $.ajax({
       url: url + '?' + requestParameter(params),
       type: 'GET',
       timeout: settings.timeout,
       cache: false,
       dataType: 'text'
-    }).done(successed).fail(failed).always(function(jqXHR, textStatus) {
+    }).done(function(response, textStatus, jqXHR){
+      succeeded(response, textStatus, jqXHR);
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+      failed(jqXHR, textStatus, errorThrown);
+    }).always(function(jqXHR, textStatus) {
       console.log(jqXHR);
     });
 };
 
 function requestParameter(params) {
-  return Object.keys(params).filter(function (k) {return params[k]}).map(function(k){return k+'='+params[k]}).join('&')
+  return Object.keys(params).filter(function (k) {return params[k]}).map(function(k){return k+'='+params[k]}).join('&');
 }
 
 function loadSeq(file) {
@@ -112,9 +120,6 @@ function drawResult(rid, discription, result) {
   const row = afters[reserved];
   $(row).find('.rid input').val(rid);
   $(row).find('.discription textarea').val(discription);
-  //$(row).find('.seq textarea').val(targets[i].sequence);
-  //$(row).find('.description textarea').val(targets[i].description);
-  //calcurate($(row));
 }
 
 
@@ -146,9 +151,6 @@ function update(row, status) {
     row.removeClass(i);
   }
   row.addClass(status);
-  if('finished' !== status) {
-    //row.html(settings.status[status]);
-  }
 }
 
 function newIndex() {
