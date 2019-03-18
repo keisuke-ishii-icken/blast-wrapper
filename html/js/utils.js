@@ -133,8 +133,15 @@ function calcurate(row) {
     c: seq.split(/c/gm).length - 1,
     n: seq.split(/n/gm).length - 1
   };
-  row.find('.info').html('length:' + seq.length + '<br />A:' +counter.a + '<br />T:' +counter.t + '<br />G:' +counter.g + '<br />C:' +counter.c + '<br />N:' +counter.n);
-  if(seq) {
+  
+  const counterStr = Object.keys(counter).map(function(k) {return k.toUpperCase() + ':' + counter[k];}).join('<br />');
+  row.find('.info').html('length:' + seq.length + '<br />' + counterStr);
+  
+  const sum = Object.keys(counter).map(function(k) {return counter[k];}).reduce(function(v1, v2) {return v1 + v2;});
+  if(sum !== seq.length) {
+    update(row, 'error');
+    row.find('.results').html('input seq with ATGC, or N.');
+  } else if(seq) {
     update(row, 'ready');
   } else {
     update(row, 'empty');
