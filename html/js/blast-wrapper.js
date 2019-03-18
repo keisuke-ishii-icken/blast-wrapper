@@ -67,10 +67,15 @@ $('#search').on('click', function(event){
   }
 });
 
-$('.seq').on('change', function(event) {
-  const row = $(event.target).closest('.row');
-  calcurate(row);
-
+$('.seq').on({
+  'change': function(event) {
+    const row = $(event.target).closest('.row');
+    calcurate(row);
+  },
+  'keyup': function(event) {
+    const row = $(event.target).closest('.row');
+    calcurate(row);
+  }
 });
 
 $('#add').on('click', function(event){
